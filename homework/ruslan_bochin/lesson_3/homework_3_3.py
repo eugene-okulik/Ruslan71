@@ -1,7 +1,7 @@
 x = 10
 y = 5
 
-arithmetic = (x +y) / 2
+arithmetic = (x + y) / 2
 print(arithmetic)
 
 
