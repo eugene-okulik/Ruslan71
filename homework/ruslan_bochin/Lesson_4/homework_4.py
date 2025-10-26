@@ -12,8 +12,9 @@ my_dict['list'].append(60)
 del my_dict['list'][1]
 print(my_dict['list'][1])
 
-my_dict['dict']['(i am a tuple, )'] = (1, 2, 3)
-del my_dict['dict']['a']
+# В словаре: добавляем элемент с ключом ('i am a tuple',) и удаляем один элемент
+my_dict['dict'][('i am a tuple',)] = 'some value' # добавляем пару ключ-значение
+del my_dict['dict']['b'] # Удалим, например, ключ 'b'
 print(my_dict['dict'])
 
 my_dict['set'].add(6)
