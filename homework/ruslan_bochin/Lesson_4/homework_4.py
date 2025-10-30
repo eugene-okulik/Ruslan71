@@ -13,7 +13,7 @@ del my_dict['list'][1]
 print(my_dict['list'][1])
 
 
-my_dict[('i am a tuple')] = 'some value'
+my_dict[('i am a tuple',)] = 'some value'
 del my_dict['dict']['b']
 print(my_dict['dict'])
 
