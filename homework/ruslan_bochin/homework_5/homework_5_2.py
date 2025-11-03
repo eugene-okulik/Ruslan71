@@ -1,7 +1,21 @@
-one = int(42) + 10
-two = int(514) + 10
-three = int(9) + 10
+one = 'результат операции: 42'
+two = 'результат операции: 514'
+three = 'результат работы программы: 9'
 
-print(one)
-print(two)
-print(three)
+text = one
+colon_index = text.index(":")
+number_str = text[colon_index + 2:]
+number = int(number_str)
+print(number + 10)
+
+text = two
+colon_index = text.index(":")
+number_str = text[colon_index + 2:]
+number = int(number_str)
+print(number + 10)
+
+text = three
+colon_index = text.index(":")
+number_str = text[colon_index + 2:]
+number = int(number_str)
+print(number + 10)

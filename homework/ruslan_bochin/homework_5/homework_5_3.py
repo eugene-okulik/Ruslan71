@@ -1,5 +1,5 @@
 students = ['Ivanov', 'Petrov', 'Sidorov']
 subjects = ['math', 'biology', 'geography']
 
-text = 'Students ' + ', '.join(students) + ' study thense subjects: ' + ', '.join(subjects)
+text = f'Students {", ".join(students)} study these subjects: {", ".join(subjects)}'
 print(text)
