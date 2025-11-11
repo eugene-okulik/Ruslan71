@@ -2,6 +2,7 @@ import sys
 
 sys.set_int_max_str_digits(1_000_000_000)
 
+
 def fibonacci():
     a, b = 0, 1
     while True:
