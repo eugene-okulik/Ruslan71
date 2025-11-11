@@ -10,4 +10,3 @@ else:
     total = salary
 
 print(f"{salary}, {bonus} - '${total}'")
-
