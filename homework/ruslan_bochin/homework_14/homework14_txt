@@ -1,25 +1,20 @@
-INSERT INTO students (name) VALUES ('Иван Иванов');
+INSERT INTO students (name, second_name) VALUES ('Иван', 'Иванов');
 
 INSERT INTO books (title) VALUES
 ('Математика 101'),
 ('Физика для начинающих'),
 ('История мира');
 
-INSERT IGNORE INTO student_books (student_id, book_id) VALUES
-(1, 1),
-(1, 2),
-(1, 3);
-
-INSERT INTO `groups` (name) VALUES ('Группа А');
+INSERT INTO `groups` (title) VALUES ('Группа А');
 
 UPDATE students SET group_id = 1 WHERE id = 1;
 
-INSERT INTO subjects (name) VALUES
+INSERT INTO subjects (title) VALUES
 ('Математика'),
 ('Физика'),
 ('История');
 
-INSERT INTO lessons (subject_id, name) VALUES
+INSERT INTO lessons (subject_id, title) VALUES
 (1, 'Алгебра'),
 (1, 'Геометрия'),
 (2, 'Механика'),
@@ -27,7 +22,7 @@ INSERT INTO lessons (subject_id, name) VALUES
 (3, 'Древний мир'),
 (3, 'Новейшая история');
 
-INSERT INTO marks (student_id, lesson_id, mark) VALUES
+INSERT INTO marks (student_id, lesson_id, value) VALUES
 (1, 1, 5),
 (1, 2, 4),
 (1, 3, 5),
@@ -35,27 +30,20 @@ INSERT INTO marks (student_id, lesson_id, mark) VALUES
 (1, 5, 5),
 (1, 6, 4);
 
-SELECT m.mark, l.name AS lesson_name, s.name AS subject_name
+SELECT m.value AS mark, l.title AS lesson_name, s.title AS subject_name
 FROM marks m
 JOIN lessons l ON m.lesson_id = l.id
 JOIN subjects s ON l.subject_id = s.id
 WHERE m.student_id = 1;
 
-SELECT b.title
-FROM books b
-JOIN student_books sb ON b.id = sb.book_id
-WHERE sb.student_id = 1;
-
 SELECT st.name AS student_name,
-       g.name AS group_name,
-       b.title AS book_title,
-       m.mark,
-       l.name AS lesson_name,
-       s.name AS subject_name
+       st.second_name,
+       g.title AS group_name,
+       m.value AS mark,
+       l.title AS lesson_name,
+       s.title AS subject_name
 FROM students st
 LEFT JOIN `groups` g ON st.group_id = g.id
-LEFT JOIN student_books sb ON st.id = sb.student_id
-LEFT JOIN books b ON sb.book_id = b.id
 LEFT JOIN marks m ON st.id = m.student_id
 LEFT JOIN lessons l ON m.lesson_id = l.id
 LEFT JOIN subjects s ON l.subject_id = s.id
