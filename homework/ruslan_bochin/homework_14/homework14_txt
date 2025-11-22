@@ -1,0 +1,50 @@
+INSERT INTO students (name, second_name) VALUES ('Иван', 'Иванов');
+
+INSERT INTO books (title) VALUES
+('Математика 101'),
+('Физика для начинающих'),
+('История мира');
+
+INSERT INTO `groups` (title) VALUES ('Группа А');
+
+UPDATE students SET group_id = 1 WHERE id = 1;
+
+INSERT INTO subjects (title) VALUES
+('Математика'),
+('Физика'),
+('История');
+
+INSERT INTO lessons (subject_id, title) VALUES
+(1, 'Алгебра'),
+(1, 'Геометрия'),
+(2, 'Механика'),
+(2, 'Оптика'),
+(3, 'Древний мир'),
+(3, 'Новейшая история');
+
+INSERT INTO marks (student_id, lesson_id, value) VALUES
+(1, 1, 5),
+(1, 2, 4),
+(1, 3, 5),
+(1, 4, 4),
+(1, 5, 5),
+(1, 6, 4);
+
+SELECT m.value AS mark, l.title AS lesson_name, s.title AS subject_name
+FROM marks m
+JOIN lessons l ON m.lesson_id = l.id
+JOIN subjects s ON l.subject_id = s.id
+WHERE m.student_id = 1;
+
+SELECT st.name AS student_name,
+       st.second_name,
+       g.title AS group_name,
+       m.value AS mark,
+       l.title AS lesson_name,
+       s.title AS subject_name
+FROM students st
+LEFT JOIN `groups` g ON st.group_id = g.id
+LEFT JOIN marks m ON st.id = m.student_id
+LEFT JOIN lessons l ON m.lesson_id = l.id
+LEFT JOIN subjects s ON l.subject_id = s.id
+WHERE st.id = 1;
