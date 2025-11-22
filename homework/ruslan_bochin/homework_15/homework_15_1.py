@@ -1,6 +1,5 @@
 import mysql.connector
 
-# Подключение к базе
 db = mysql.connector.connect(
     host="db-mysql-fra1-09136-do-user-7651996-0.b.db.ondigitalocean.com",
     user="st-onl",
@@ -32,23 +31,24 @@ cursor.execute(
 print(f"Студент {student_id} добавлен в группу {group_id}")
 
 books = ["Математика 101", "Физика для начинающих", "История мира"]
-book_ids = []
-for title in books:
-    cursor.execute(
-        "INSERT INTO books (title) VALUES (%s)",
-        (title,)
-    )
-    book_ids.append(cursor.lastrowid)
-print(f"Созданы книги: {book_ids}")
+
+cursor.executemany(
+    "INSERT INTO books (title) VALUES (%s)",
+    [(title,) for title in books]
+)
+
+print(f"Созданы книги: {books}")
 
 subjects = ["Математика", "Физика", "История"]
 subject_ids = []
+
 for title in subjects:
     cursor.execute(
         "INSERT INTO subjects (title) VALUES (%s)",
         (title,)
     )
     subject_ids.append(cursor.lastrowid)
+
 print(f"Созданы предметы: {subject_ids}")
 
 lessons_per_subject = {
@@ -58,23 +58,27 @@ lessons_per_subject = {
 }
 
 lesson_ids = []
+
 for subj_name, lesson_list in lessons_per_subject.items():
     subj_index = subjects.index(subj_name)
     subj_id = subject_ids[subj_index]
+
     for lesson_name in lesson_list:
         cursor.execute(
             "INSERT INTO lessons (title, subject_id) VALUES (%s, %s)",
             (lesson_name, subj_id)
         )
         lesson_ids.append(cursor.lastrowid)
+
 print(f"Созданы уроки: {lesson_ids}")
 
 marks = ["5", "4", "5", "4", "5", "4"]
-for lesson_id, mark in zip(lesson_ids, marks):
-    cursor.execute(
-        "INSERT INTO marks (student_id, lesson_id, value) VALUES (%s, %s, %s)",
-        (student_id, lesson_id, mark)
-    )
+
+cursor.executemany(
+    "INSERT INTO marks (student_id, lesson_id, value) VALUES (%s, %s, %s)",
+    [(student_id, lesson_id, mark) for lesson_id, mark in zip(lesson_ids, marks)]
+)
+
 print(f"Добавлены оценки студенту {student_id}")
 
 db.commit()
