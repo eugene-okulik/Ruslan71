@@ -1,10 +1,10 @@
 import allure
 import requests
 
-from homework.ruslan_bochin.test_api_bochin.endpoints.endpoints import Endpoint
+from test_api_bochin.endpoints.endpoints import Endpoint
 
 
-class UpdatePost(Endpoint):
+class UpdateObject(Endpoint):
 
     @allure.step("Update object via PUT")
     def update_put(self, object_id, payload, headers=None):

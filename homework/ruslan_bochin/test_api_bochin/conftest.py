@@ -1,25 +1,32 @@
 import pytest
 
-from homework.ruslan_bochin.test_api_bochin.endpoints.create_post import CreatePost
-from homework.ruslan_bochin.test_api_bochin.endpoints.update_post import UpdatePost
+from test_api_bochin.endpoints.create_object import CreateObject
+from test_api_bochin.endpoints.delete_object import DeleteObject
+from test_api_bochin.endpoints.update_object import UpdateObject
 
 
 @pytest.fixture()
-def create_post_endpoint():
-    return CreatePost()
+def create_object_endpoint():
+    return CreateObject()
 
 
 @pytest.fixture()
-def update_post_endpoint():
-    return UpdatePost()
+def update_object_endpoint():
+    return UpdateObject()
 
 
 @pytest.fixture()
-def new_object_id(create_post_endpoint):
-    """Создаёт объект перед тестом и удаляет после"""
+def delete_object_endpoint():
+    return DeleteObject()
+
+
+@pytest.fixture()
+def new_object_id(create_object_endpoint, delete_object_endpoint):
     payload = {"name": "Мой объект", "data": {"key": "value"}}
-    create_post_endpoint.create_new_object(payload)
-    yield create_post_endpoint.object_id
-    # удаляем объект после теста (если нужно)
-    if create_post_endpoint.object_id:
-        create_post_endpoint.response = None
+    create_object_endpoint.create_new_object(payload)
+    object_id = create_object_endpoint.object_id
+
+    yield object_id
+
+    delete_object_endpoint.delete_object(object_id)
+    delete_object_endpoint.check_status_200()
