@@ -51,3 +51,11 @@ def test_update_object_patch(new_object_id, update_object_endpoint):
     payload = {"data": {"key": "частичное обновление"}}
     update_object_endpoint.update_patch(new_object_id, payload)
     update_object_endpoint.check_status_200()
+
+
+@allure.feature("Objects")
+@allure.story("Delete object")
+@pytest.mark.regression
+def test_delete_object(new_object_id, delete_object_endpoint):
+    delete_object_endpoint.delete_object(new_object_id)
+    delete_object_endpoint.check_status_200()
