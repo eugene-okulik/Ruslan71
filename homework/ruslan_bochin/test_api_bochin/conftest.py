@@ -21,7 +21,19 @@ def delete_object_endpoint():
 
 
 @pytest.fixture()
-def new_object_id(create_object_endpoint):
+def new_object_id(create_object_endpoint, delete_object_endpoint):
+    payload = {"name": "Мой объект", "data": {"key": "value"}}
+    create_object_endpoint.create_new_object(payload)
+    object_id = create_object_endpoint.object_id
+
+    yield object_id
+
+    if object_id:
+        delete_object_endpoint.delete_object(object_id)
+
+
+@pytest.fixture()
+def new_object_id_without_delete(create_object_endpoint):
     payload = {"name": "Мой объект", "data": {"key": "value"}}
     create_object_endpoint.create_new_object(payload)
     return create_object_endpoint.object_id
