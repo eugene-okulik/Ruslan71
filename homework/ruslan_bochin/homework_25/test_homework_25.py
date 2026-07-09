@@ -1,5 +1,3 @@
-from time import sleep
-
 import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -12,7 +10,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 @pytest.fixture()
 def driver():
     chrome_driver = webdriver.Chrome()
-    sleep(2)
     chrome_driver.maximize_window()
     yield chrome_driver
     chrome_driver.quit()
@@ -21,7 +18,9 @@ def driver():
 def test_input_simple(driver):
     input_text = 'homework_25_test'
     driver.get('https://www.qa-practice.com/elements/input/simple')
-    text_field = driver.find_element(By.NAME, 'text_string')
+    text_field = WebDriverWait(driver, 5).until(
+        EC.element_to_be_clickable((By.NAME, 'text_string'))
+    )
     text_field.send_keys(input_text)
     text_field.send_keys(Keys.ENTER)
     result = WebDriverWait(driver, 5).until(
@@ -33,6 +32,9 @@ def test_input_simple(driver):
 
 def test_practice_form(driver):
     driver.get('https://demoqa.com/automation-practice-form')
+    WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.ID, 'firstName'))
+    )
     driver.find_element(By.ID, 'firstName').send_keys('Ruslan')
     driver.find_element(By.ID, 'lastName').send_keys('Bochin')
     driver.find_element(By.ID, 'userEmail').send_keys('ruslan.test@mail.com')
@@ -51,12 +53,14 @@ def test_practice_form(driver):
     driver.find_element(By.ID, 'currentAddress').send_keys('Moscow')
 
     driver.find_element(By.ID, 'state').click()
-    driver.find_element(By.XPATH, '//div[text()="NCR"]').click()
+    WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '//div[text()="NCR"]'))).click()
     driver.find_element(By.ID, 'city').click()
-    driver.find_element(By.XPATH, '//div[text()="Delhi"]').click()
+    WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '//div[text()="Delhi"]'))).click()
 
     driver.find_element(By.ID, 'submit').click()
-    modal = driver.find_element(By.CLASS_NAME, 'modal-content')
+    modal = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.CLASS_NAME, 'modal-content'))
+    )
     print(modal.text)
     assert 'Ruslan' in modal.text
     assert 'Bochin' in modal.text
@@ -65,17 +69,24 @@ def test_practice_form(driver):
 def test_single_select(driver):
     selected_language = 'Python'
     driver.get('https://www.qa-practice.com/elements/select/single_select')
-    select_element = driver.find_element(By.ID, 'id_choose_language')
+    select_element = WebDriverWait(driver, 5).until(
+        EC.element_to_be_clickable((By.ID, 'id_choose_language'))
+    )
     Select(select_element).select_by_visible_text(selected_language)
     driver.find_element(By.NAME, 'submit').click()
-    result = driver.find_element(By.ID, 'result-text')
+    result = WebDriverWait(driver, 5).until(
+        EC.visibility_of_element_located((By.ID, 'result-text'))
+    )
     print(result.text)
     assert selected_language in result.text
 
 
 def test_dynamic_loading(driver):
     driver.get('https://the-internet.herokuapp.com/dynamic_loading/2')
-    driver.find_element(By.CSS_SELECTOR, '#start button').click()
+    start_button = WebDriverWait(driver, 5).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, '#start button'))
+    )
+    start_button.click()
     hello_text = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.ID, 'finish'))
     )
