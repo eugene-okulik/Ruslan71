@@ -9,8 +9,8 @@ class DesksPage(BasePage):
     page_url = '/shop/category/desks-1'
 
     @allure.step('Check desks breadcrumb')
-    def check_desks_in_breadcrumb(self):
-        expect(self.find(Loc.BREADCRUMB)).to_contain_text('Desks')
+    def check_desks_in_breadcrumb(self, text):
+        expect(self.find(Loc.BREADCRUMB)).to_contain_text(text)
 
     @allure.step('Check products are displayed')
     def check_products_are_displayed(self):
@@ -19,7 +19,7 @@ class DesksPage(BasePage):
 
     @allure.step('Check customizable desk product')
     def check_customizable_desk_is_visible(self):
-        expect(self.page.get_by_text('Customizable Desk').first).to_be_visible()
+        expect(self.find(Loc.CUSTOMIZABLE_DESK).first).to_be_visible()
 
     @allure.step('Check sort by is visible')
     def check_sort_by_is_visible(self):

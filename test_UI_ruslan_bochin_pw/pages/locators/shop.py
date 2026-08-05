@@ -1,6 +1,8 @@
 class CartLocators:
     EMPTY_CART_MESSAGE = '.alert'
     ORDER_OVERVIEW = 'h3'
+    REVIEW_ORDER = 'text=Review Order'
+    SIGN_IN_LINK = 'a:has-text("Sign in")'
 
 
 class DesksLocators:

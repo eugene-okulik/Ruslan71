@@ -4,7 +4,7 @@ import allure
 @allure.feature('Desks category')
 def test_desks_breadcrumb(desks_page):
     desks_page.open()
-    desks_page.check_desks_in_breadcrumb()
+    desks_page.check_desks_in_breadcrumb('Desks')
 
 
 @allure.feature('Desks category')
