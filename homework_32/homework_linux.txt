@@ -1,0 +1,24 @@
+Задание 1. Часть 2 — работа с man (клавиши less)
+
+Go to first line in file: g
+Go to last line in file: G
+Forward one window: Space (или f)
+Forward one line: Enter (или j / e)
+Backward one line: y (или k)
+Search forward for matching line: /
+Search backward for matching line: ?
+Repeat previous search: n
+Repeat previous search in reverse direction: N
+
+
+Задание 2 — типы файлов (результаты команды stat на сервере)
+
+/dev/null      - character special file (символьное устройство)
+/dev/zero      - character special file (символьное устройство)
+/dev/sda       - файла нет на сервере (No such file or directory)
+/dev/tty       - character special file (символьное устройство)
+/root          - directory (директория)
+/etc/passwd    - regular file (обычный файл)
+/proc/mounts   - symbolic link (символическая ссылка) -> self/mounts
+/bin/ls        - regular file (обычный файл)
+/bin/zcat      - regular file (обычный файл)
