@@ -26,7 +26,8 @@ def test_get_single_meme(new_meme_id, get_meme_endpoint):
 def test_create_meme(create_meme_endpoint):
     text = "Мой первый мем"
     url = (
-        "https://yandex.ru/images/search?from=tabbar&img_url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FIST51rB_SJo%2Fmaxresdefault.jpg"
+        "https://yandex.ru/images/search?from=tabbar"
+        "&img_url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FIST51rB_SJo%2Fmaxresdefault.jpg"
         "&lr=10313&pos=27&rpt=simage&text=mems"
     )
     tags = ["funny", "ruslan"]
@@ -53,7 +54,8 @@ def test_create_meme(create_meme_endpoint):
 @pytest.mark.regression
 def test_update_meme(new_meme_id, update_meme_endpoint):
     url = (
-        "https://yandex.ru/images/search?from=tabbar&img_url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FIST51rB_SJo%2Fmaxresdefault.jpg"
+        "https://yandex.ru/images/search?from=tabbar"
+        "&img_url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FIST51rB_SJo%2Fmaxresdefault.jpg"
         "&lr=10313&pos=27&rpt=simage&text=mems"
     )
 

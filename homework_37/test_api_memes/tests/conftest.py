@@ -40,9 +40,14 @@ def delete_meme_endpoint(auth_token):
 
 @pytest.fixture()
 def new_meme_id(create_meme_endpoint, delete_meme_endpoint):
+    meme_url = (
+        "https://yandex.ru/images/search?from=tabbar"
+        "&img_url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FIST51rB_SJo%2Fmaxresdefault.jpg"
+        "&lr=10313&pos=27&rpt=simage&text=mems"
+    )
     payload = {
         "text": "Мой первый мем",
-        "url": "https://yandex.ru/images/search?from=tabbar&img_url=https%3A%2F%2Fi.ytimg.com%2Fvi%2FIST51rB_SJo%2Fmaxresdefault.jpg&lr=10313&pos=27&rpt=simage&text=mems",
+        "url": meme_url,
         "tags": ["funny", "ruslan"],
         "info": {"author": "Ruslan"},
     }
