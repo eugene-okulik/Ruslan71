@@ -1,0 +1,133 @@
+name: Python autotests
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: choose tests set
+        required: true
+        type: choice
+        default: smoke
+        options:
+          - smoke
+          - regression
+          - extended
+          - all
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: homework_37
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    name: Run autotests
+    steps:
+      - name: Checkout autotests
+        uses: actions/checkout@v4
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: run all tests
+        if: ${{ github.event_name == 'push' || github.event.inputs.deployment_target == 'all' }}
+        run: pytest --alluredir=allure-results
+        continue-on-error: true
+
+      - name: run smoke tests
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'smoke' }}
+        run: pytest -m smoke --alluredir=allure-results
+        continue-on-error: true
+
+      - name: run regression tests
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'regression' }}
+        run: pytest -m regression --alluredir=allure-results
+        continue-on-error: true
+
+      - name: run extended tests
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'extended' }}
+        run: pytest -m extended --alluredir=allure-results
+        continue-on-error: true
+
+      - name: Get Allure history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Install Java
+        if: always()
+        uses: actions/setup-java@v3
+        with:
+          distribution: "microsoft"
+          java-version: "17"
+
+      - name: Install Allure
+        if: always()
+        working-directory: .
+        run: >
+          sudo wget https://github.com/allure-framework/allure2/releases/download/2.24.1/allure-2.24.1.tgz
+          && sudo tar -zxvf allure-2.24.1.tgz -C /opt/
+          && sudo ln -s /opt/allure-2.24.1/bin/allure /usr/bin/allure
+
+      - name: Prepare Allure history
+        if: always()
+        working-directory: .
+        run: |
+          if [ -d gh-pages/history ]; then
+            mkdir -p homework_37/allure-results/history
+            cp -r gh-pages/history/* homework_37/allure-results/history/ || true
+          fi
+
+      - name: Generate report
+        if: always()
+        run: allure generate -c allure-results -o _site
+
+      - name: Save allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: _site
+          path: homework_37/_site
+          retention-days: 1
+
+  publish-report:
+    name: Report publication
+    needs: run-tests
+    if: always()
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: _site
+          path: _site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

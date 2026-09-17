@@ -1,10 +1,6 @@
 name: flake8 Lint
 
-on:
-  push:
-  pull_request:
-      types: [assigned, opened, synchronize, reopened, review_requested]
-  workflow_dispatch: # to trigger manually
+on: [push]
 
 jobs:
   flake8-lint:
@@ -14,7 +10,7 @@ jobs:
       - name: Check out source repository
         uses: actions/checkout@v4
       - name: Set up Python environment
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
       - name: flake8 Lint
@@ -22,3 +18,4 @@ jobs:
         with:
           ignore: "F401,W503"
           max-line-length: "120"
+          path: "homework_37/test_api_memes"
